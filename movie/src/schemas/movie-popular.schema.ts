@@ -36,18 +36,8 @@ export const MoviePopularResponseSchema = z.object({
 export type MoviePopularResponse = z.infer<typeof MoviePopularResponseSchema>
 
 /**
- * 인기 영화 목록 파싱 헬퍼
- */
-export const parseMoviePopularResponse = (
-  data: unknown
-): MoviePopularResponse => {
-  return MoviePopularResponseSchema.parse(data)
-}
-
-/**
  * 인기 영화 목록 안전 파싱 헬퍼
  */
 export const safeParseMoviePopularResponse = (data: unknown) => {
   return MoviePopularResponseSchema.safeParse(data)
 }
-

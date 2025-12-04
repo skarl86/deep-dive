@@ -43,13 +43,6 @@ export const MovieDetailSchema = z.object({
 export type MovieDetail = z.infer<typeof MovieDetailSchema>
 
 /**
- * 영화 상세 정보 파싱 헬퍼
- */
-export const parseMovieDetail = (data: unknown): MovieDetail => {
-  return MovieDetailSchema.parse(data)
-}
-
-/**
  * 영화 상세 정보 안전 파싱 헬퍼
  */
 export const safeParseMovieDetail = (data: unknown) => {
