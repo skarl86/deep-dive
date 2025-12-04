@@ -164,7 +164,7 @@ import type {
 ```
 
 자세한 타입 정의는 다음 파일을 참조하세요:
-- `src/schemas/movie-popular.schema.ts`
-- `src/schemas/movie-detail.schema.ts`
-- `src/schemas/error.schema.ts`
+- `schemas/movie-popular.schema.ts`
+- `schemas/movie-detail.schema.ts`
+- `schemas/error.schema.ts`
 

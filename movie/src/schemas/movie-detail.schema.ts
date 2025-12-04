@@ -55,3 +55,4 @@ export const parseMovieDetail = (data: unknown): MovieDetail => {
 export const safeParseMovieDetail = (data: unknown) => {
   return MovieDetailSchema.safeParse(data)
 }
+

@@ -105,3 +105,4 @@ export const isNotFoundError = (error: TMDBError): boolean => {
     error.status_code === TMDBErrorCode.ENTRY_NOT_FOUND
   )
 }
+

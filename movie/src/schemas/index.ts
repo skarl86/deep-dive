@@ -64,3 +64,4 @@ export {
 } from "./error.schema"
 
 export type { TMDBError, TMDBErrorCodeType } from "./error.schema"
+

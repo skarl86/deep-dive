@@ -50,3 +50,4 @@ export const parseMoviePopularResponse = (
 export const safeParseMoviePopularResponse = (data: unknown) => {
   return MoviePopularResponseSchema.safeParse(data)
 }
+
