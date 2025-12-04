@@ -1,16 +1,16 @@
 "use server"
 
-import { z } from "zod"
 import {
-  parseMoviePopularResponse,
-  parseMovieDetail,
-  safeParseTMDBError,
   isAuthenticationError,
   isNotFoundError,
   isRateLimitError,
-  type MoviePopularResponse,
+  safeParseMovieDetail,
+  safeParseMoviePopularResponse,
+  safeParseTMDBError,
   type MovieDetail,
+  type MoviePopularResponse,
 } from "@/schemas"
+import { z } from "zod"
 
 /**
  * TMDB API Base URL
@@ -138,9 +138,16 @@ export async function getPopularMovies(
 
     // 5. 성공 응답 검증
     const json = await response.json()
-    const data = parseMoviePopularResponse(json)
+    const result = safeParseMoviePopularResponse(json)
 
-    return { success: true, data }
+    if (!result.success) {
+      return {
+        success: false,
+        error: `응답 데이터 검증 실패: ${result.error.message}`,
+      }
+    }
+
+    return { success: true, data: result.data }
   } catch (error: unknown) {
     // Zod 검증 에러 또는 기타 에러 처리
     if (error instanceof Error) {
@@ -169,8 +176,9 @@ export async function getMovieDetail({
 }: GetMovieDetailParams): Promise<ActionResult<MovieDetail>> {
   try {
     // 1. 파라미터 검증
-    const { movieId: validatedMovieId } =
-      GetMovieDetailParamsSchema.parse({ movieId })
+    const { movieId: validatedMovieId } = GetMovieDetailParamsSchema.parse({
+      movieId,
+    })
 
     // 2. 환경 변수 검증
     const headers = createAuthHeaders()
@@ -199,9 +207,16 @@ export async function getMovieDetail({
 
     // 5. 성공 응답 검증
     const json = await response.json()
-    const data = parseMovieDetail(json)
+    const result = safeParseMovieDetail(json)
 
-    return { success: true, data }
+    if (!result.success) {
+      return {
+        success: false,
+        error: `응답 데이터 검증 실패: ${result.error.message}`,
+      }
+    }
+
+    return { success: true, data: result.data }
   } catch (error: unknown) {
     // Zod 검증 에러 또는 기타 에러 처리
     if (error instanceof Error) {
@@ -210,4 +225,3 @@ export async function getMovieDetail({
     return { success: false, error: "알 수 없는 오류가 발생했습니다" }
   }
 }
-
