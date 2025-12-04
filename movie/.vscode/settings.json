@@ -53,6 +53,13 @@
   "files.eol": "\n",
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
+  "files.trimFinalNewlines": true,
+
+  // Trailing Spaces 확장 프로그램 설정
+  "trailing-spaces.trimOnSave": true,
+  "trailing-spaces.includeEmptyLines": false,
+  "trailing-spaces.highlightCurrentLine": false,
+  "trailing-spaces.deleteModifiedLinesOnly": false,
 
   // 검색 제외 설정
   "search.exclude": {

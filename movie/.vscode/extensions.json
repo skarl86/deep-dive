@@ -3,6 +3,7 @@
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
+    "shardulm94.trailing-spaces",
     "ms-vscode.vscode-typescript-next",
     "christian-kohler.path-intellisense",
     "zignd.html-css-class-completion"
