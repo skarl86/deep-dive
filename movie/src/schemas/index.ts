@@ -33,7 +33,6 @@ export type {
 // 영화 상세 정보 스키마 및 타입
 export {
   MovieDetailSchema,
-  parseMovieDetail,
   safeParseMovieDetail,
 } from "./movie-detail.schema"
 
@@ -43,7 +42,6 @@ export type { MovieDetail } from "./movie-detail.schema"
 export {
   MovieListItemSchema,
   MoviePopularResponseSchema,
-  parseMoviePopularResponse,
   safeParseMoviePopularResponse,
 } from "./movie-popular.schema"
 
@@ -64,3 +62,4 @@ export {
 } from "./error.schema"
 
 export type { TMDBError, TMDBErrorCodeType } from "./error.schema"
+
