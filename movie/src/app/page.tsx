@@ -1,69 +1,84 @@
+import { getPopularMovies } from "@/actions/tmdb/movie"
+import { InfiniteMovieList } from "@/components/infinite-movie-list"
 import { ThemeToggle } from "@/components/theme-toggle"
-import Image from "next/image"
+import { uniqueMoviesById } from "@/utils/array"
 
-export default function Home() {
+/**
+ * 홈 페이지
+ * 
+ * ISR 전략:
+ * - 초기 2페이지(40개 영화)를 서버에서 미리 렌더링
+ * - revalidate: 3600으로 1시간 캐시
+ * - 추가 페이지는 클라이언트에서 무한 스크롤로 로드
+ */
+export default async function Home() {
+  // 1. 초기 2페이지 데이터를 병렬로 fetch (빠른 로딩)
+  const [page1Result, page2Result] = await Promise.all([
+    getPopularMovies({ page: 1 }),
+    getPopularMovies({ page: 2 }),
+  ])
+
+  // 2. 에러 처리 - 첫 페이지 로드 실패
+  if (!page1Result.success) {
+    return (
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+        <div className="container mx-auto px-4 py-8">
+          <header className="mb-8 flex items-center justify-between">
+            <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+              Movie App
+            </h1>
+            <ThemeToggle />
+          </header>
+
+          <main>
+            <div
+              role="alert"
+              className="flex min-h-[400px] items-center justify-center text-red-600"
+            >
+              <p>에러: {page1Result.error}</p>
+            </div>
+          </main>
+        </div>
+      </div>
+    )
+  }
+
+  // 3. 초기 영화 목록 구성
+  // 첫 페이지는 필수, 두 번째 페이지는 실패해도 진행
+  const allMovies = [
+    ...page1Result.data.results,
+    ...(page2Result.success ? page2Result.data.results : []),
+  ]
+
+  // 4. 중복 제거 (TMDB API는 페이지 간 데이터가 겹칠 수 있음)
+  const initialMovies = uniqueMoviesById(allMovies)
+
+  // 5. 다음 로드할 페이지 번호
+  const nextPage = page2Result.success ? 3 : 2
+
+  // 6. 전체 페이지 수
+  const totalPages = page1Result.data.total_pages
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="relative flex min-h-screen w-full max-w-3xl flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <div className="absolute top-4 right-4">
-          <ThemeToggle />
-        </div>
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <header className="mb-8 flex items-center justify-between">
+          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
+            Movie App
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          <ThemeToggle />
+        </header>
+
+        {/* Main Content - 무한 스크롤 영화 목록 */}
+        <main>
+          <InfiniteMovieList
+            initialMovies={initialMovies}
+            nextPage={nextPage}
+            totalPages={totalPages}
+          />
+        </main>
+      </div>
     </div>
   )
 }
