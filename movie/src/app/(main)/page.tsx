@@ -1,5 +1,5 @@
 import { getPopularMovies } from "@/actions/tmdb/movie"
-import { InfiniteMovieList } from "@/components/infinite-movie-list"
+import { InfiniteMovieList } from "@/app/(main)/_components/infinite-movie-list"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { uniqueMoviesById } from "@/utils/array"
 
@@ -82,3 +82,4 @@ export default async function Home() {
     </div>
   )
 }
+
