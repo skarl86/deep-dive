@@ -28,6 +28,10 @@ export function Header() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
+    
+    // 초기 스크롤 위치 체크 (페이지 로드 시 이미 스크롤된 상태 처리)
+    handleScroll()
+    
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
