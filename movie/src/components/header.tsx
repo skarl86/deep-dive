@@ -36,6 +36,19 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  // viewport 크기 변경 감지 → 데스크톱 크기가 되면 모바일 메뉴 자동 닫기
+  useEffect(() => {
+    const handleResize = () => {
+      // md breakpoint (768px) 이상이면 모바일 메뉴 닫기
+      if (window.innerWidth >= 768 && mobileMenuOpen) {
+        setMobileMenuOpen(false)
+      }
+    }
+
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [mobileMenuOpen])
+
   // 모바일 메뉴 열림 시 body 스크롤 방지
   useEffect(() => {
     if (mobileMenuOpen) {
