@@ -1,85 +1,25 @@
-import { getPopularMovies } from "@/actions/tmdb/movie"
-import { InfiniteMovieList } from "@/app/(main)/_components/infinite-movie-list"
-import { ThemeToggle } from "@/components/theme-toggle"
-import { uniqueMoviesById } from "@/utils/array"
+import { Suspense } from "react"
+import { MovieListContent } from "@/app/(main)/_components/movie-list-content"
+import { MovieListSkeleton } from "@/components/movie-list-skeleton"
 
 /**
  * 홈 페이지
  * 
- * ISR 전략:
- * - 초기 2페이지(40개 영화)를 서버에서 미리 렌더링
- * - revalidate: 3600으로 1시간 캐시
- * - 추가 페이지는 클라이언트에서 무한 스크롤로 로드
+ * React Suspense를 활용한 스트리밍 렌더링:
+ * - Header는 루트 레이아웃에서 즉시 렌더링
+ * - MovieListSkeleton이 먼저 표시되어 빠른 First Paint
+ * - MovieListContent는 백그라운드에서 데이터 페칭 후 스트리밍
+ * 
+ * 사용자 경험:
+ * - 헤더와 스켈레톤이 즉시 표시되어 로딩 상태 인지
+ * - 데이터 준비되는 대로 실제 콘텐츠로 교체
+ * - 전체 페이지 블로킹 없이 점진적 렌더링
  */
-export default async function Home() {
-  // 1. 초기 2페이지 데이터를 병렬로 fetch (빠른 로딩)
-  const [page1Result, page2Result] = await Promise.all([
-    getPopularMovies({ page: 1 }),
-    getPopularMovies({ page: 2 }),
-  ])
-
-  // 2. 에러 처리 - 첫 페이지 로드 실패
-  if (!page1Result.success) {
-    return (
-      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-        <div className="container mx-auto px-4 py-8">
-          <header className="mb-8 flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-              Movie App
-            </h1>
-            <ThemeToggle />
-          </header>
-
-          <main>
-            <div
-              role="alert"
-              className="flex min-h-[400px] items-center justify-center text-red-600"
-            >
-              <p>에러: {page1Result.error}</p>
-            </div>
-          </main>
-        </div>
-      </div>
-    )
-  }
-
-  // 3. 초기 영화 목록 구성
-  // 첫 페이지는 필수, 두 번째 페이지는 실패해도 진행
-  const allMovies = [
-    ...page1Result.data.results,
-    ...(page2Result.success ? page2Result.data.results : []),
-  ]
-
-  // 4. 중복 제거 (TMDB API는 페이지 간 데이터가 겹칠 수 있음)
-  const initialMovies = uniqueMoviesById(allMovies)
-
-  // 5. 다음 로드할 페이지 번호
-  const nextPage = page2Result.success ? 3 : 2
-
-  // 6. 전체 페이지 수
-  const totalPages = page1Result.data.total_pages
-
+export default function Home() {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <header className="mb-8 flex items-center justify-between">
-          <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50">
-            Movie App
-          </h1>
-          <ThemeToggle />
-        </header>
-
-        {/* Main Content - 무한 스크롤 영화 목록 */}
-        <main>
-          <InfiniteMovieList
-            initialMovies={initialMovies}
-            nextPage={nextPage}
-            totalPages={totalPages}
-          />
-        </main>
-      </div>
-    </div>
+    <Suspense fallback={<MovieListSkeleton />}>
+      <MovieListContent />
+    </Suspense>
   )
 }
 
