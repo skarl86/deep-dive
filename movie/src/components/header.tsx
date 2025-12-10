@@ -1,11 +1,11 @@
 "use client"
 
-import { Search, Menu, X } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { useState, useEffect } from "react"
+import { cn } from "@/lib/utils"
+import { Menu, Search, X } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react"
 
 /**
  * GNB (Global Navigation Bar)
@@ -55,7 +55,7 @@ export function Header() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-zinc-50/95 dark:bg-zinc-950/95 backdrop-blur-md shadow-md"
+            ? "bg-zinc-50/70 dark:bg-zinc-950/70 backdrop-blur-md shadow-md"
             : "bg-gradient-to-b from-zinc-900/80 to-transparent"
         )}
       >
