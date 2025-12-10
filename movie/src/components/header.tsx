@@ -201,7 +201,15 @@ export function Header() {
       )}
 
       {/* Header 높이만큼 padding (sticky로 인한 컨텐츠 가림 방지) */}
-      <div className="h-16" aria-hidden="true" />
+      {/* py-4 (32px) + h-10 버튼 (40px) = 72px */}
+      {/* 검색창 열림: mt-4 (16px) + py-2 input (40px) = 추가 56px */}
+      <div 
+        className={cn(
+          "transition-all duration-300",
+          searchOpen ? "h-[128px]" : "h-[72px]"
+        )} 
+        aria-hidden="true" 
+      />
     </>
   )
 }
