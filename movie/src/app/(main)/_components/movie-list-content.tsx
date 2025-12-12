@@ -4,10 +4,10 @@ import { uniqueMoviesById } from "@/utils/array"
 
 /**
  * 영화 목록 콘텐츠 (Server Component)
- * 
+ *
  * 데이터 페칭 및 초기 렌더링을 담당합니다.
  * Suspense boundary 내부에서 실행되어 스트리밍 렌더링을 지원합니다.
- * 
+ *
  * ISR 전략:
  * - 초기 2페이지(40개 영화)를 서버에서 미리 렌더링
  * - 추가 페이지는 클라이언트에서 무한 스크롤로 로드
@@ -27,7 +27,9 @@ export async function MovieListContent() {
         className="flex min-h-[400px] items-center justify-center text-red-600 dark:text-red-400"
       >
         <div className="text-center">
-          <p className="text-lg font-semibold mb-2">영화를 불러올 수 없습니다</p>
+          <p className="mb-2 text-lg font-semibold">
+            영화를 불러올 수 없습니다
+          </p>
           <p className="text-sm">{page1Result.error}</p>
         </div>
       </div>
@@ -58,4 +60,3 @@ export async function MovieListContent() {
     />
   )
 }
-
