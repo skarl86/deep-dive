@@ -48,4 +48,3 @@ export type MovieDetail = z.infer<typeof MovieDetailSchema>
 export const safeParseMovieDetail = (data: unknown) => {
   return MovieDetailSchema.safeParse(data)
 }
-

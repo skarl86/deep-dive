@@ -26,4 +26,3 @@ export const GetMovieDetailParamsSchema = z.object({
 })
 
 export type GetMovieDetailParams = z.infer<typeof GetMovieDetailParamsSchema>
-

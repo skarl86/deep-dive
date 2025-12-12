@@ -14,7 +14,7 @@ export async function MovieList() {
     return (
       <div
         role="alert"
-        className="flex items-center justify-center min-h-[400px] text-red-600"
+        className="flex min-h-[400px] items-center justify-center text-red-600"
       >
         <p>에러: {result.error}</p>
       </div>
@@ -26,7 +26,7 @@ export async function MovieList() {
   // 3. 빈 결과 처리
   if (results.length === 0) {
     return (
-      <div className="flex items-center justify-center min-h-[400px] text-gray-600">
+      <div className="flex min-h-[400px] items-center justify-center text-gray-600">
         <p>영화를 찾을 수 없습니다.</p>
       </div>
     )
@@ -35,7 +35,7 @@ export async function MovieList() {
   // 4. 그리드 레이아웃 (PC 중심 반응형)
   return (
     <section aria-label="인기 영화 목록">
-      <h2 className="text-2xl font-bold mb-6">인기 영화</h2>
+      <h2 className="mb-6 text-2xl font-bold">인기 영화</h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 lg:gap-6 xl:grid-cols-8">
         {results.map((movie) => (
           <MovieCard key={movie.id} movie={movie} />

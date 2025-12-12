@@ -54,4 +54,3 @@ export const CollectionSchema = z.object({
 })
 
 export type Collection = z.infer<typeof CollectionSchema>
-
