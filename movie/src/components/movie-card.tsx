@@ -18,7 +18,10 @@ export function MovieCard({ movie }: MovieCardProps) {
 
   return (
     <Link href={`/movie/${movie.id}`}>
-      <article className="flex cursor-pointer flex-col gap-2 transition-transform hover:scale-105">
+      <article
+        data-testid="movie-card"
+        className="flex cursor-pointer flex-col gap-2 transition-transform hover:scale-105"
+      >
         {/* 포스터 이미지 - CLS 방지를 위한 aspect ratio 고정 */}
         {posterUrl ? (
           <div className="relative aspect-[2/3] w-full">
