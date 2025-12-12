@@ -14,11 +14,19 @@ TMDB_API_READ_ACCESS_TOKEN=your_tmdb_token_here
 
 ### 2. Playwright 브라우저 설치
 
-처음 실행 시 다음 명령어로 브라우저를 설치하세요:
+처음 실행 시 다음 명령어로 모든 브라우저를 설치하세요:
 
 ```bash
 pnpm exec playwright install --with-deps
 ```
+
+설치되는 브라우저:
+
+- Chromium (Chrome/Edge)
+- Firefox
+- WebKit (Safari)
+
+> **팁**: 특정 브라우저만 필요한 경우 `pnpm exec playwright install chromium`처럼 개별 설치도 가능합니다.
 
 ## 테스트 실행
 
@@ -83,40 +91,38 @@ e2e/
 │   ├── home.spec.ts       # 홈페이지 테스트
 │   ├── infinite-scroll.spec.ts  # 무한 스크롤
 │   ├── theme.spec.ts      # 다크모드 전환
-│   ├── accessibility.spec.ts    # 접근성 (WCAG 2.1 AA)
-│   └── responsive.spec.ts # 시각적 회귀 테스트
+│   └── accessibility.spec.ts    # 접근성 (WCAG 2.1 AA)
 └── visual-snapshots/      # 스크린샷 베이스라인
 ```
 
 ## 주요 테스트 항목
 
 ### 1. 홈페이지 테스트 (`home.spec.ts`)
+
 - 페이지 렌더링 확인
 - 영화 목록 로드 검증
 - 이미지 지연 로딩
 - 페이지 성능 측정
 
 ### 2. 무한 스크롤 (`infinite-scroll.spec.ts`)
+
 - 스크롤 시 추가 영화 로드
 - 여러 번 스크롤 테스트
 - 중복 제거 확인
 
 ### 3. 다크모드 (`theme.spec.ts`)
+
 - 테마 토글 동작 확인
 - 테마 설정 유지
 - 시각적 차이 검증
 
 ### 4. 접근성 (`accessibility.spec.ts`)
+
 - WCAG 2.1 AA 준수 확인
 - 키보드 네비게이션
 - 이미지 alt 텍스트
 - Heading 계층 구조
 - 색상 대비
-
-### 5. 시각적 회귀 (`responsive.spec.ts`)
-- 모바일/태블릿/데스크톱 스크린샷
-- 다크모드 스크린샷
-- 반응형 레이아웃 검증
 
 ## 문제 해결
 
@@ -125,17 +131,10 @@ e2e/
 개발 서버가 이미 실행 중이면 테스트가 기존 서버를 재사용합니다.
 포트를 변경하려면 `playwright.config.ts`의 `webServer.url`을 수정하세요.
 
-### 스크린샷 업데이트
-
-시각적 회귀 테스트의 베이스라인을 업데이트하려면:
-
-```bash
-pnpm exec playwright test --update-snapshots
-```
-
 ### CI/CD 실패
 
 GitHub Actions에서 테스트가 실패하면:
+
 1. 아티팩트에서 스크린샷과 비디오 확인
 2. 리포트 다운로드하여 상세 분석
 3. 로컬에서 동일한 브라우저 프로젝트로 재현
@@ -170,8 +169,8 @@ test.describe("새 기능 테스트", () => {
 ## CI/CD
 
 GitHub Actions에서 자동으로 실행됩니다:
+
 - PR 생성 시
 - main/develop 브랜치에 push 시
 
 테스트 결과와 리포트는 아티팩트로 저장됩니다.
-
