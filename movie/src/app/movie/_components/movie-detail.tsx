@@ -9,7 +9,7 @@ interface MovieDetailProps {
 
 /**
  * 영화 상세 정보 컴포넌트
- * 
+ *
  * Netflix 스타일의 현대적인 디자인으로 영화 정보를 표시합니다.
  * - Hero 섹션: 백드롭 이미지 + 그라데이션 오버레이
  * - 메타 정보: 평점, 개봉일, 러닝타임, 장르
@@ -73,19 +73,19 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                       {movie.vote_average.toFixed(1)}
                     </span>
                   </div>
-                  <span className="text-xs text-zinc-600 dark:text-zinc-400 sm:text-sm">
+                  <span className="text-xs text-zinc-600 sm:text-sm dark:text-zinc-400">
                     ({movie.vote_count.toLocaleString()}명 평가)
                   </span>
                 </div>
 
                 {/* 타이틀 */}
-                <h1 className="text-3xl font-bold text-zinc-900 dark:text-zinc-50 sm:text-4xl lg:text-5xl">
+                <h1 className="text-3xl font-bold text-zinc-900 sm:text-4xl lg:text-5xl dark:text-zinc-50">
                   {movie.title}
                 </h1>
 
                 {/* 태그라인 */}
                 {movie.tagline && (
-                  <p className="text-base italic text-zinc-700 dark:text-zinc-300 sm:text-lg lg:text-xl">
+                  <p className="text-base text-zinc-700 italic sm:text-lg lg:text-xl dark:text-zinc-300">
                     {movie.tagline}
                   </p>
                 )}
@@ -126,33 +126,39 @@ export function MovieDetail({ movie }: MovieDetailProps) {
               <section aria-label="영화 메타 정보">
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
                   {/* 개봉일 */}
-                  <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:p-4">
+                  <div className="rounded-lg border border-zinc-200 bg-white p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                       <Calendar className="h-4 w-4 flex-shrink-0" />
-                      <span className="text-xs font-medium sm:text-sm">개봉일</span>
+                      <span className="text-xs font-medium sm:text-sm">
+                        개봉일
+                      </span>
                     </div>
-                    <p className="mt-2 break-words text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                    <p className="mt-2 text-sm font-semibold break-words text-zinc-900 sm:text-base dark:text-zinc-50">
                       {releaseDate}
                     </p>
                   </div>
 
                   {/* 러닝타임 */}
-                  <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:p-4">
+                  <div className="rounded-lg border border-zinc-200 bg-white p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
                       <Clock className="h-4 w-4 flex-shrink-0" />
-                      <span className="text-xs font-medium sm:text-sm">러닝타임</span>
+                      <span className="text-xs font-medium sm:text-sm">
+                        러닝타임
+                      </span>
                     </div>
-                    <p className="mt-2 text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                    <p className="mt-2 text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                       {runtimeText}
                     </p>
                   </div>
 
                   {/* 상태 */}
-                  <div className="col-span-2 rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:col-span-1 sm:p-4">
+                  <div className="col-span-2 rounded-lg border border-zinc-200 bg-white p-3 sm:col-span-1 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
                     <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
-                      <span className="text-xs font-medium sm:text-sm">상태</span>
+                      <span className="text-xs font-medium sm:text-sm">
+                        상태
+                      </span>
                     </div>
-                    <p className="mt-2 text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                    <p className="mt-2 text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                       {movie.status === "Released" ? "개봉" : movie.status}
                     </p>
                   </div>
@@ -160,15 +166,15 @@ export function MovieDetail({ movie }: MovieDetailProps) {
 
                 {/* 장르 */}
                 {movie.genres.length > 0 && (
-                  <div className="mt-4 rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-800 dark:bg-zinc-900 sm:p-4">
-                    <h3 className="text-xs font-medium text-zinc-600 dark:text-zinc-400 sm:text-sm">
+                  <div className="mt-4 rounded-lg border border-zinc-200 bg-white p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
+                    <h3 className="text-xs font-medium text-zinc-600 sm:text-sm dark:text-zinc-400">
                       장르
                     </h3>
                     <div className="mt-2 flex flex-wrap gap-2">
                       {movie.genres.map((genre) => (
                         <span
                           key={genre.id}
-                          className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 dark:bg-red-900/30 dark:text-red-400 sm:text-sm"
+                          className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-700 sm:text-sm dark:bg-red-900/30 dark:text-red-400"
                         >
                           {genre.name}
                         </span>
@@ -180,10 +186,10 @@ export function MovieDetail({ movie }: MovieDetailProps) {
 
               {/* 줄거리 */}
               <section aria-label="줄거리">
-                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50 sm:text-2xl">
+                <h2 className="text-xl font-bold text-zinc-900 sm:text-2xl dark:text-zinc-50">
                   줄거리
                 </h2>
-                <p className="mt-3 whitespace-pre-wrap text-sm leading-relaxed text-zinc-700 dark:text-zinc-300 sm:mt-4 sm:text-base sm:leading-relaxed">
+                <p className="mt-3 text-sm leading-relaxed whitespace-pre-wrap text-zinc-700 sm:mt-4 sm:text-base sm:leading-relaxed dark:text-zinc-300">
                   {movie.overview || "줄거리 정보가 없습니다."}
                 </p>
               </section>
@@ -191,9 +197,9 @@ export function MovieDetail({ movie }: MovieDetailProps) {
               {/* 제작 정보 */}
               <section
                 aria-label="제작 정보"
-                className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900/50 sm:p-6"
+                className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 sm:p-6 dark:border-zinc-800 dark:bg-zinc-900/50"
               >
-                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-50 sm:text-2xl">
+                <h2 className="text-xl font-bold text-zinc-900 sm:text-2xl dark:text-zinc-50">
                   제작 정보
                 </h2>
 
@@ -201,7 +207,7 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                   {/* 제작사 */}
                   {movie.production_companies.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                      <h3 className="text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                         제작사
                       </h3>
                       <ul className="mt-2 space-y-1">
@@ -225,11 +231,13 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                   {/* 제작 국가 */}
                   {movie.production_countries.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                      <h3 className="text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                         제작 국가
                       </h3>
                       <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
-                        {movie.production_countries.map((c) => c.name).join(", ")}
+                        {movie.production_countries
+                          .map((c) => c.name)
+                          .join(", ")}
                       </p>
                     </div>
                   )}
@@ -237,11 +245,13 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                   {/* 언어 */}
                   {movie.spoken_languages.length > 0 && (
                     <div>
-                      <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                      <h3 className="text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                         사용 언어
                       </h3>
                       <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
-                        {movie.spoken_languages.map((l) => l.english_name).join(", ")}
+                        {movie.spoken_languages
+                          .map((l) => l.english_name)
+                          .join(", ")}
                       </p>
                     </div>
                   )}
@@ -251,7 +261,7 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       {movie.budget > 0 && (
                         <div>
-                          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                          <h3 className="text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                             예산
                           </h3>
                           <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
@@ -261,7 +271,7 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                       )}
                       {movie.revenue > 0 && (
                         <div>
-                          <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 sm:text-base">
+                          <h3 className="text-sm font-semibold text-zinc-900 sm:text-base dark:text-zinc-50">
                             수익
                           </h3>
                           <p className="mt-2 text-sm text-zinc-700 dark:text-zinc-300">
@@ -280,4 +290,3 @@ export function MovieDetail({ movie }: MovieDetailProps) {
     </article>
   )
 }
-
