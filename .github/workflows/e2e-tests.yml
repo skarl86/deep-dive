@@ -3,8 +3,24 @@ name: E2E Tests
 on:
   push:
     branches: [main, develop]
+    paths:
+      - "movie/src/**"
+      - "movie/e2e/**"
+      - "movie/playwright.config.ts"
+      - "movie/next.config.ts"
+      - "movie/tsconfig.json"
+      - "movie/package.json"
+      - "movie/pnpm-lock.yaml"
   pull_request:
     branches: [main, develop]
+    paths:
+      - "movie/src/**"
+      - "movie/e2e/**"
+      - "movie/playwright.config.ts"
+      - "movie/next.config.ts"
+      - "movie/tsconfig.json"
+      - "movie/package.json"
+      - "movie/pnpm-lock.yaml"
 
 jobs:
   test:
@@ -69,4 +85,3 @@ jobs:
           name: test-results
           path: movie/test-results/
           retention-days: 30
-
