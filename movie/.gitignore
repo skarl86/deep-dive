@@ -13,6 +13,15 @@
 # testing
 /coverage
 
+# e2e (playwright)
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/blob-report/
+/playwright/.auth/
+test-results.json
+test-results.xml
+
 # next.js
 /.next/
 /out/
