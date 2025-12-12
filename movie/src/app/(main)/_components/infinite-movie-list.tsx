@@ -1,12 +1,12 @@
 "use client"
 
 import { getPopularMovies } from "@/actions/tmdb/movie"
-import { useInfiniteScroll } from "@/hooks/use-infinite-scroll"
-import type { MovieListItem } from "@/schemas"
-import { useCallback, useState } from "react"
 import { MovieCard } from "@/components/movie-card"
 import { MovieSkeleton } from "@/components/movie-skeleton"
+import { useInfiniteScroll } from "@/hooks/use-infinite-scroll"
+import type { MovieListItem } from "@/schemas"
 import { uniqueMoviesById } from "@/utils/array"
+import { useCallback, useState } from "react"
 
 interface InfiniteMovieListProps {
   /**
@@ -28,10 +28,10 @@ interface InfiniteMovieListProps {
 
 /**
  * 무한 스크롤 영화 목록 컴포넌트
- * 
+ *
  * ISR로 미리 렌더링된 초기 데이터를 받아서 표시하고,
  * 스크롤 시 추가 페이지를 동적으로 로드합니다.
- * 
+ *
  * Prefetching 전략:
  * - 스크롤 80% 지점에서 다음 페이지를 미리 로드
  * - 사용자가 끝에 도달하기 전에 데이터 준비
@@ -43,13 +43,13 @@ export function InfiniteMovieList({
 }: InfiniteMovieListProps) {
   // 영화 목록 상태
   const [movies, setMovies] = useState<MovieListItem[]>(initialMovies)
-  
+
   // 현재 페이지 (다음 로드할 페이지)
   const [currentPage, setCurrentPage] = useState(nextPage)
-  
+
   // 로딩 상태
   const [isLoading, setIsLoading] = useState(false)
-  
+
   // 에러 상태
   const [error, setError] = useState<string | undefined>(undefined)
 
@@ -78,7 +78,7 @@ export function InfiniteMovieList({
 
       // 새로운 영화 추가 (중복 제거)
       setMovies((prev) => uniqueMoviesById([...prev, ...result.data.results]))
-      
+
       // 다음 페이지로 이동
       setCurrentPage((prev) => prev + 1)
     } catch (err) {
@@ -145,4 +145,3 @@ export function InfiniteMovieList({
     </section>
   )
 }
-

@@ -31,10 +31,7 @@ export type {
 } from "./common.schema"
 
 // 영화 상세 정보 스키마 및 타입
-export {
-  MovieDetailSchema,
-  safeParseMovieDetail,
-} from "./movie-detail.schema"
+export { MovieDetailSchema, safeParseMovieDetail } from "./movie-detail.schema"
 
 export type { MovieDetail } from "./movie-detail.schema"
 
@@ -62,4 +59,3 @@ export {
 } from "./error.schema"
 
 export type { TMDBError, TMDBErrorCodeType } from "./error.schema"
-

@@ -19,4 +19,3 @@ export const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
  */
 export const BLUR_DATA_URL =
   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYGD4DwABBAEAW9DULQAAAABJRU5ErkJggg=="
-

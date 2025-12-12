@@ -22,12 +22,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={`${openSans.variable} font-sans antialiased min-h-screen bg-zinc-50 dark:bg-zinc-950`}>
+      <body
+        className={`${openSans.variable} min-h-screen bg-zinc-50 font-sans antialiased dark:bg-zinc-950`}
+      >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <Header />
-          <main className="container mx-auto px-4 pb-8">
-            {children}
-          </main>
+          <main className="container mx-auto px-4 pb-8">{children}</main>
         </ThemeProvider>
       </body>
     </html>

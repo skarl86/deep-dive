@@ -10,7 +10,7 @@ import { useEffect, useState } from "react"
 /**
  * GNB (Global Navigation Bar)
  * 넷플릭스 스타일의 상단 네비게이션
- * 
+ *
  * 주요 기능:
  * - Sticky 포지셔닝으로 상단 고정
  * - 스크롤 시 배경색 변경 (투명 → 불투명)
@@ -28,10 +28,10 @@ export function Header() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
     }
-    
+
     // 초기 스크롤 위치 체크 (페이지 로드 시 이미 스크롤된 상태 처리)
     handleScroll()
-    
+
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
@@ -70,10 +70,10 @@ export function Header() {
     <>
       <header
         className={cn(
-          "fixed top-0 left-0 right-0 z-[70] transition-all duration-300",
+          "fixed top-0 right-0 left-0 z-[70] transition-all duration-300",
           scrolled
-            ? "bg-zinc-50/70 dark:bg-zinc-950/70 backdrop-blur-md shadow-md"
-            : "bg-gradient-to-b from-zinc-50/80 dark:from-zinc-900/80 to-transparent"
+            ? "bg-zinc-50/70 shadow-md backdrop-blur-md dark:bg-zinc-950/70"
+            : "bg-gradient-to-b from-zinc-50/80 to-transparent dark:from-zinc-900/80"
         )}
       >
         <nav className="container mx-auto px-4 py-4">
@@ -83,16 +83,16 @@ export function Header() {
               href="/"
               className="flex items-center space-x-2 transition-opacity hover:opacity-80"
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-red-600 to-red-700 text-white font-bold text-lg">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-gradient-to-br from-red-600 to-red-700 text-lg font-bold text-white">
                 M
               </div>
-              <span className="text-xl font-bold text-zinc-900 dark:text-zinc-50 hidden sm:block">
+              <span className="hidden text-xl font-bold text-zinc-900 sm:block dark:text-zinc-50">
                 Movie App
               </span>
             </Link>
 
             {/* 데스크톱 메뉴 */}
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden items-center space-x-6 md:flex">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
@@ -117,7 +117,7 @@ export function Header() {
                 className={cn(
                   "inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors",
                   "hover:bg-zinc-100 dark:hover:bg-zinc-800",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300"
+                  "focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:outline-none dark:focus-visible:ring-zinc-300"
                 )}
                 aria-label="검색"
               >
@@ -133,7 +133,7 @@ export function Header() {
                 className={cn(
                   "inline-flex h-10 w-10 items-center justify-center rounded-md transition-colors md:hidden",
                   "hover:bg-zinc-100 dark:hover:bg-zinc-800",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 dark:focus-visible:ring-zinc-300"
+                  "focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:outline-none dark:focus-visible:ring-zinc-300"
                 )}
                 aria-label="메뉴"
                 aria-expanded={mobileMenuOpen}
@@ -149,7 +149,7 @@ export function Header() {
 
           {/* 검색창 (열렸을 때) */}
           {searchOpen && (
-            <div className="mt-4 animate-in slide-in-from-top-2 duration-200">
+            <div className="animate-in slide-in-from-top-2 mt-4 duration-200">
               <input
                 type="search"
                 placeholder="영화 제목을 입력하세요..."
@@ -158,7 +158,7 @@ export function Header() {
                   "bg-white dark:bg-zinc-900",
                   "px-4 py-2 text-sm",
                   "placeholder:text-zinc-400 dark:placeholder:text-zinc-600",
-                  "focus:outline-none focus:ring-2 focus:ring-zinc-950 dark:focus:ring-zinc-300"
+                  "focus:ring-2 focus:ring-zinc-950 focus:outline-none dark:focus:ring-zinc-300"
                 )}
                 autoFocus
               />
@@ -172,13 +172,13 @@ export function Header() {
         <div className="fixed inset-0 z-[60] md:hidden">
           {/* 배경 오버레이 */}
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+            className="animate-in fade-in absolute inset-0 bg-black/60 backdrop-blur-sm duration-200"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
 
           {/* 메뉴 패널 */}
-          <div className="absolute right-0 top-0 h-full w-64 bg-zinc-50 dark:bg-zinc-950 shadow-xl animate-in slide-in-from-right duration-300">
+          <div className="animate-in slide-in-from-right absolute top-0 right-0 h-full w-64 bg-zinc-50 shadow-xl duration-300 dark:bg-zinc-950">
             <div className="flex flex-col p-6 pt-20">
               {navItems.map((item) => (
                 <Link
@@ -186,10 +186,10 @@ export function Header() {
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "py-3 text-lg font-medium transition-colors border-b border-zinc-200 dark:border-zinc-800",
+                    "border-b border-zinc-200 py-3 text-lg font-medium transition-colors dark:border-zinc-800",
                     pathname === item.href
                       ? "text-zinc-900 dark:text-zinc-50"
-                      : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-50"
+                      : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
                   )}
                 >
                   {item.label}
@@ -203,14 +203,13 @@ export function Header() {
       {/* Header 높이만큼 padding (sticky로 인한 컨텐츠 가림 방지) */}
       {/* py-4 (32px) + h-10 버튼 (40px) = 72px */}
       {/* 검색창 열림: mt-4 (16px) + py-2 input (40px) = 추가 56px */}
-      <div 
+      <div
         className={cn(
           "transition-all duration-300",
           searchOpen ? "h-[128px]" : "h-[72px]"
-        )} 
-        aria-hidden="true" 
+        )}
+        aria-hidden="true"
       />
     </>
   )
 }
-

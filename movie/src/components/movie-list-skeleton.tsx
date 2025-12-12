@@ -2,10 +2,10 @@ import { MovieSkeleton } from "@/components/movie-skeleton"
 
 /**
  * 영화 목록 스켈레톤 로딩 UI
- * 
+ *
  * Suspense fallback으로 사용되며,
  * 데이터 페칭 중 사용자에게 로딩 상태를 시각적으로 제공합니다.
- * 
+ *
  * 실제 콘텐츠와 동일한 레이아웃 구조를 유지하여
  * 레이아웃 시프트(CLS)를 최소화합니다.
  */
@@ -29,4 +29,3 @@ export function MovieListSkeleton() {
     </section>
   )
 }
-

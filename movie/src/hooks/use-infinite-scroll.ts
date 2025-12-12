@@ -29,17 +29,17 @@ interface UseInfiniteScrollOptions {
 
 /**
  * IntersectionObserver 기반 무한 스크롤 훅
- * 
+ *
  * 스크롤 끝에 sentinel 엘리먼트를 배치하고,
  * 해당 엘리먼트가 뷰포트에 들어오면 onIntersect 콜백을 호출합니다.
- * 
+ *
  * @example
  * ```tsx
  * const loadMoreRef = useInfiniteScroll({
  *   onIntersect: loadNextPage,
  *   enabled: hasNextPage && !isLoading
  * })
- * 
+ *
  * return (
  *   <>
  *     {movies.map(movie => <MovieCard key={movie.id} movie={movie} />)}
@@ -97,4 +97,3 @@ export function useInfiniteScroll({
 
   return elementRef
 }
-

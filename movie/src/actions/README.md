@@ -28,9 +28,11 @@ TMDB_API_READ_ACCESS_TOKEN=your_tmdb_bearer_token_here
 인기 영화 목록을 조회합니다.
 
 **파라미터:**
+
 - `page` (선택): 페이지 번호 (기본값: 1, 양의 정수)
 
 **캐시 전략:**
+
 - Revalidate: 3600초 (1시간)
 - Tags: `['movies', 'popular']`
 
@@ -61,9 +63,11 @@ if (result1.success) {
 특정 영화의 상세 정보를 조회합니다.
 
 **파라미터:**
+
 - `movieId` (필수): 영화 ID (양의 정수)
 
 **캐시 전략:**
+
 - Revalidate: 86400초 (24시간)
 - Tags: `['movies', 'movie-{id}']`
 
@@ -164,7 +168,7 @@ import type {
 ```
 
 자세한 타입 정의는 다음 파일을 참조하세요:
+
 - `schemas/movie-popular.schema.ts`
 - `schemas/movie-detail.schema.ts`
 - `schemas/error.schema.ts`
-

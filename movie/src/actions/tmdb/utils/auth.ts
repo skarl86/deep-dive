@@ -13,4 +13,3 @@ export function createAuthHeaders(): Record<string, string> | undefined {
     "Content-Type": "application/json",
   }
 }
-

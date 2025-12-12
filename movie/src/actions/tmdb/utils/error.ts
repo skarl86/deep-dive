@@ -36,4 +36,3 @@ export async function handleTMDBError(response: Response): Promise<string> {
 
   return `HTTP ${response.status}: ${response.statusText}`
 }
-
