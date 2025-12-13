@@ -26,3 +26,13 @@ export const GetMovieDetailParamsSchema = z.object({
 })
 
 export type GetMovieDetailParams = z.infer<typeof GetMovieDetailParamsSchema>
+
+/**
+ * 영화 검색 파라미터 스키마
+ */
+export const SearchMoviesParamsSchema = z.object({
+  query: z.string().min(1, "검색어를 입력해주세요"),
+  page: z.number().int().positive().optional().default(1),
+})
+
+export type SearchMoviesParams = z.infer<typeof SearchMoviesParamsSchema>
