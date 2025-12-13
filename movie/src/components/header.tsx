@@ -2,9 +2,9 @@
 
 import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
-import { Menu, Search, X } from "lucide-react"
+import { Loader2, Menu, Search, X } from "lucide-react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { type FormEvent, useEffect, useState } from "react"
 
 /**
@@ -22,7 +22,9 @@ export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
+  const [isSearching, setIsSearching] = useState(false)
   const pathname = usePathname()
+  const searchParams = useSearchParams()
   const router = useRouter()
 
   // 스크롤 감지 → 배경색 변경
@@ -63,6 +65,13 @@ export function Header() {
     }
   }, [mobileMenuOpen])
 
+  // pathname과 searchParams 변경 감지 → 검색 로딩 상태 초기화
+  // pathname: 경로 변경 감지 (예: /search → /)
+  // searchParams: 쿼리 파라미터 변경 감지 (예: /search?query=a → /search?query=b)
+  useEffect(() => {
+    setIsSearching(false)
+  }, [pathname, searchParams])
+
   const navItems = [
     { label: "홈", href: "/" },
     { label: "인기", href: "/popular" },
@@ -77,6 +86,9 @@ export function Header() {
 
     const trimmedQuery = searchQuery.trim()
     if (!trimmedQuery) return
+
+    // 검색 시작 표시
+    setIsSearching(true)
 
     // 검색 페이지로 이동
     router.push(`/search?query=${encodeURIComponent(trimmedQuery)}`)
@@ -131,6 +143,19 @@ export function Header() {
 
             {/* 우측 액션 버튼들 */}
             <div className="flex items-center space-x-2">
+              {/* 검색 로딩 인디케이터 */}
+              {isSearching && (
+                <div
+                  data-testid="search-loading-indicator"
+                  role="status"
+                  aria-live="polite"
+                  className="flex items-center"
+                >
+                  <Loader2 className="h-5 w-5 animate-spin text-zinc-600 dark:text-zinc-400" />
+                  <span className="sr-only">검색 중...</span>
+                </div>
+              )}
+
               {/* 검색 버튼 */}
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
