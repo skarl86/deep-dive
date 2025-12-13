@@ -4,8 +4,8 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { cn } from "@/lib/utils"
 import { Menu, Search, X } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { type FormEvent, useEffect, useState } from "react"
 
 /**
  * GNB (Global Navigation Bar)
@@ -21,7 +21,9 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
   const pathname = usePathname()
+  const router = useRouter()
 
   // 스크롤 감지 → 배경색 변경
   useEffect(() => {
@@ -65,6 +67,24 @@ export function Header() {
     { label: "홈", href: "/" },
     { label: "인기", href: "/popular" },
   ]
+
+  /**
+   * 검색 폼 제출 핸들러
+   * Enter 키를 누르면 검색 페이지로 이동
+   */
+  const handleSearch = (e: FormEvent) => {
+    e.preventDefault()
+
+    const trimmedQuery = searchQuery.trim()
+    if (!trimmedQuery) return
+
+    // 검색 페이지로 이동
+    router.push(`/search?query=${encodeURIComponent(trimmedQuery)}`)
+
+    // 검색창 닫기 및 입력값 초기화
+    setSearchOpen(false)
+    setSearchQuery("")
+  }
 
   return (
     <>
@@ -149,9 +169,15 @@ export function Header() {
 
           {/* 검색창 (열렸을 때) */}
           {searchOpen && (
-            <div className="animate-in slide-in-from-top-2 mt-4 duration-200">
+            <form
+              onSubmit={handleSearch}
+              role="search"
+              className="animate-in slide-in-from-top-2 mt-4 duration-200"
+            >
               <input
                 type="search"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="영화 제목을 입력하세요..."
                 className={cn(
                   "w-full rounded-md border border-zinc-300 dark:border-zinc-700",
@@ -160,9 +186,10 @@ export function Header() {
                   "placeholder:text-zinc-400 dark:placeholder:text-zinc-600",
                   "focus:ring-2 focus:ring-zinc-950 focus:outline-none dark:focus:ring-zinc-300"
                 )}
+                aria-label="영화 검색"
                 autoFocus
               />
-            </div>
+            </form>
           )}
         </nav>
       </header>
