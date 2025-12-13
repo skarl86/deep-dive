@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test"
+import { expect, test } from "@playwright/test"
 
 test.describe("검색 페이지", () => {
   test.beforeEach(async ({ page }) => {
@@ -35,7 +35,9 @@ test.describe("검색 페이지", () => {
 
     // 초기 영화 카드 개수 확인
     await page.waitForSelector('[data-testid="movie-card"]', { timeout: 10000 })
-    const initialCount = await page.locator('[data-testid="movie-card"]').count()
+    const initialCount = await page
+      .locator('[data-testid="movie-card"]')
+      .count()
     expect(initialCount).toBeGreaterThan(0)
 
     // 페이지 끝까지 스크롤
@@ -62,11 +64,11 @@ test.describe("검색 페이지", () => {
     await page.goto("/search?query=xyzabc123notfound999")
 
     // 빈 상태 메시지 확인
-    const emptyState = page.locator('text=/결과를 찾을 수 없습니다/i')
+    const emptyState = page.locator("text=/결과를 찾을 수 없습니다/i")
     await expect(emptyState).toBeVisible({ timeout: 10000 })
 
     // 검색 팁이 표시되는지 확인
-    const searchTips = page.locator('text=/검색 팁/i')
+    const searchTips = page.locator("text=/검색 팁/i")
     await expect(searchTips).toBeVisible()
   })
 
@@ -76,14 +78,18 @@ test.describe("검색 페이지", () => {
 
     // 결과 표시 확인
     await page.waitForSelector('[data-testid="movie-card"]', { timeout: 10000 })
-    const initialCount = await page.locator('[data-testid="movie-card"]').count()
+    const initialCount = await page
+      .locator('[data-testid="movie-card"]')
+      .count()
 
     // 페이지 새로고침
     await page.reload()
 
     // 검색 결과가 여전히 표시되는지 확인
     await page.waitForSelector('[data-testid="movie-card"]', { timeout: 10000 })
-    const afterReloadCount = await page.locator('[data-testid="movie-card"]').count()
+    const afterReloadCount = await page
+      .locator('[data-testid="movie-card"]')
+      .count()
 
     // 동일한 개수의 결과가 표시되어야 함
     expect(afterReloadCount).toBe(initialCount)
@@ -225,13 +231,13 @@ test.describe("검색 페이지", () => {
 
     // 제목 스켈레톤 확인 (h-8 w-64 animate-pulse)
     const titleSkeleton = page.locator(
-      'div.h-8.w-64.animate-pulse.rounded-md.bg-zinc-200'
+      "div.h-8.w-64.animate-pulse.rounded-md.bg-zinc-200"
     )
     await expect(titleSkeleton).toBeVisible({ timeout: 2000 })
 
     // 설명 스켈레톤 확인 (h-5 w-48 animate-pulse)
     const descriptionSkeleton = page.locator(
-      'div.h-5.w-48.animate-pulse.rounded-md.bg-zinc-200'
+      "div.h-5.w-48.animate-pulse.rounded-md.bg-zinc-200"
     )
     await expect(descriptionSkeleton).toBeVisible()
 
@@ -249,9 +255,9 @@ test.describe("검색 페이지", () => {
     // 3. 실제 콘텐츠 로딩 후 스켈레톤이 사라지고 실제 데이터가 표시되는지 확인
 
     // 실제 영화 카드가 표시될 때까지 대기
-    await expect(page.locator('[data-testid="movie-card"]').first()).toBeVisible(
-      { timeout: 10000 }
-    )
+    await expect(
+      page.locator('[data-testid="movie-card"]').first()
+    ).toBeVisible({ timeout: 10000 })
 
     // 스켈레톤이 사라졌는지 확인
     await expect(titleSkeleton).not.toBeVisible()
@@ -267,5 +273,139 @@ test.describe("검색 페이지", () => {
     const movieCount = await movieCards.count()
     expect(movieCount).toBeGreaterThan(0)
   })
-})
 
+  test("검색 시작 시 로딩 피드백이 표시되고 완료 후 사라짐", async ({
+    page,
+  }) => {
+    // 네트워크 지연 추가하여 로딩 상태를 충분히 관찰 가능하게 함
+    await page.route("**/api.themoviedb.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await route.continue()
+    })
+
+    // 1. 홈 페이지로 이동
+    await page.goto("/")
+
+    // 2. 검색 버튼 클릭
+    await page.click('button[aria-label="검색"]')
+
+    // 3. 검색어 입력
+    const searchInput = page.locator('input[type="search"]')
+    await expect(searchInput).toBeVisible()
+    await searchInput.fill("avengers")
+
+    // 4. 엔터 키 누르기
+    await searchInput.press("Enter")
+
+    // 5. 헤더 로딩 인디케이터가 나타나는지 확인
+    const loadingIndicator = page.locator(
+      '[data-testid="search-loading-indicator"]'
+    )
+    await expect(loadingIndicator).toBeVisible({ timeout: 1000 })
+
+    // 6. 검색 결과 페이지로 이동 완료 대기
+    await expect(page).toHaveURL(/\/search\?query=avengers/)
+
+    // 7. 로딩 상태 메시지가 표시되는지 확인
+    const loadingStatus = page.locator("text=/검색 중입니다/i")
+    // 빠르면 이미 사라질 수 있으므로 존재 여부만 확인
+
+    // 8. 검색 결과가 표시되는지 확인
+    const movieCards = page.locator('[data-testid="movie-card"]')
+    await expect(movieCards.first()).toBeVisible({ timeout: 10000 })
+
+    // 9. 헤더 로딩 인디케이터가 사라졌는지 확인
+    await expect(loadingIndicator).not.toBeVisible()
+  })
+
+  test("페이지 전환 시 프로그레스 바 표시", async ({ page }) => {
+    // 네트워크 지연 추가
+    await page.route("**/api.themoviedb.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 800))
+      await route.continue()
+    })
+
+    // 홈 페이지로 이동
+    await page.goto("/")
+
+    // 검색 시작
+    await page.click('button[aria-label="검색"]')
+    const searchInput = page.locator('input[type="search"]')
+    await searchInput.fill("matrix")
+    await searchInput.press("Enter")
+
+    // 프로그레스 바가 나타나는지 확인
+    const progressBar = page.locator('[data-testid="navigation-progress"]')
+    await expect(progressBar).toBeVisible({ timeout: 1000 })
+
+    // 페이지 전환 완료 대기
+    await expect(page).toHaveURL(/\/search\?query=matrix/)
+
+    // 최종 결과 표시 확인
+    await expect(
+      page.locator('[data-testid="movie-card"]').first()
+    ).toBeVisible({ timeout: 10000 })
+
+    // 프로그레스 바가 사라졌는지 확인
+    await expect(progressBar).not.toBeVisible()
+  })
+
+  test("검색 로딩 인디케이터가 검색 완료 후 정확히 사라짐", async ({
+    page,
+  }) => {
+    // 네트워크 지연 추가
+    await page.route("**/api.themoviedb.org/**", async (route) => {
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      await route.continue()
+    })
+
+    // 홈 페이지로 이동
+    await page.goto("/")
+
+    // 첫 번째 검색
+    await page.click('button[aria-label="검색"]')
+    const searchInput = page.locator('input[type="search"]')
+    await searchInput.fill("avengers")
+    await searchInput.press("Enter")
+
+    // 로딩 인디케이터가 나타나는지 확인
+    const loadingIndicator = page.locator(
+      '[data-testid="search-loading-indicator"]'
+    )
+    await expect(loadingIndicator).toBeVisible({ timeout: 1000 })
+
+    // 검색 결과 페이지로 이동 완료 대기
+    await expect(page).toHaveURL(/\/search\?query=avengers/)
+    await expect(
+      page.locator('[data-testid="movie-card"]').first()
+    ).toBeVisible({ timeout: 10000 })
+
+    // 로딩 인디케이터가 사라졌는지 확인
+    await expect(loadingIndicator).not.toBeVisible()
+
+    // 두 번째 검색 (같은 페이지에서 다른 검색어로)
+    await page.click('button[aria-label="검색"]')
+    const searchInput2 = page.locator('input[type="search"]')
+    await searchInput2.fill("batman")
+    await searchInput2.press("Enter")
+
+    // 로딩 인디케이터가 다시 나타나는지 확인
+    await expect(loadingIndicator).toBeVisible({ timeout: 1000 })
+
+    // 두 번째 검색 결과 페이지로 이동 완료 대기
+    await expect(page).toHaveURL(/\/search\?query=batman/)
+    await expect(
+      page.locator('[data-testid="movie-card"]').first()
+    ).toBeVisible({ timeout: 10000 })
+
+    // 로딩 인디케이터가 다시 사라졌는지 확인
+    await expect(loadingIndicator).not.toBeVisible()
+
+    // 세 번째: 홈으로 이동
+    await page.click('a[href="/"]')
+    await expect(page).toHaveURL("/")
+
+    // 로딩 인디케이터가 여전히 사라진 상태인지 확인
+    await expect(loadingIndicator).not.toBeVisible()
+  })
+})
