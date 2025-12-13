@@ -127,6 +127,8 @@ export function InfiniteMovieList({
           ref={loadMoreRef}
           data-testid="load-more-trigger"
           className="flex items-center justify-center py-8"
+          role="status"
+          aria-live="polite"
           aria-label="더 많은 영화 로딩 중"
         >
           {/* 스크롤 감지용 빈 요소 */}
