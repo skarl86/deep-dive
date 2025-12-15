@@ -9,38 +9,44 @@ TypeScript, React 19, Tailwind CSS 4로 구축된 Next.js 16 영화 탐색 애�
 ## 개발 명령어
 
 ### 개발 서버 시작
+
 ```bash
 cd movie
-npm run dev
+pnpm run dev
 ```
+
 개발 서버는 http://localhost:3000 에서 실행됩니다
 
 ### 프로덕션 빌드
+
 ```bash
 cd movie
-npm run build
+pnpm run build
 ```
 
 ### 프로덕션 서버 시작
+
 ```bash
 cd movie
-npm run start
+pnpm run start
 ```
 
 ### 린팅
+
 ```bash
 cd movie
-npm run lint
+pnpm run lint
 ```
 
 ### 포매팅
+
 ```bash
 cd movie
 # 포매팅 확인
-npm run format:check
+pnpm run format:check
 
 # 포매팅 수정
-npm run format
+pnpm run format
 ```
 
 ## 환경 설정
@@ -80,21 +86,28 @@ movie/src/
 ### 주요 아키텍처 패턴
 
 #### Server Actions 패턴
+
 모든 API 호출은 타입 안전한 에러 처리를 갖춘 Next.js Server Actions를 사용합니다:
+
 - `src/actions/tmdb/`에 위치
 - `ActionResult<T>` 유니온 타입 반환: `{ success: true; data: T } | { success: false; error: string }`
 - 파라미터와 API 응답 모두에 대한 Zod 검증 포함
 - 예시: `getPopularMovies()`, `getMovieDetail()`
 
 #### 스키마 검증
+
 모든 TMDB API 응답은 Zod 스키마를 사용하여 검증됩니다:
+
 - 스키마는 `src/schemas/`에 정의
 - 각 스키마는 Zod 스키마와 TypeScript 타입을 모두 export
 - Safe parsing 헬퍼는 런타임 에러를 방지: `safeParseMoviePopularResponse()`, `safeParseMovieDetail()`
 
 #### ISR + 클라이언트 사이드 무한 스크롤 하이브리드
+
 앱은 2단계 렌더링 전략을 사용합니다:
+
 1. **서버 사이드 (ISR)**: Next.js 캐시 재검증을 통한 초기 페이지 사전 렌더링
+
    - 인기 영화: 1시간 캐시 (`revalidate: 3600`)
    - 영화 상세: 24시간 캐시 (`revalidate: 86400`)
    - 캐시 태그: `['movies', 'popular']`, `['movies', 'movie-{id}']`
@@ -105,6 +118,7 @@ movie/src/
    - ID로 영화 중복 제거
 
 #### 컴포넌트 구조
+
 - **라우트 컴포넌트** (`_components/`): 특정 라우트에만 사용, 공유되지 않음
 - **공유 컴포넌트** (`components/`): 라우트 간 재사용 가능
 - 예시: `_components/`의 `InfiniteMovieList` vs `components/`의 `MovieCard`
@@ -117,12 +131,12 @@ movie/src/
 
 ```typescript
 // ❌ 잘못된 방식
-import { helper } from "../utils/helper"
-import { Button } from "./components/Button"
+import { helper } from "../utils/helper";
+import { Button } from "./components/Button";
 
 // ✅ 올바른 방식
-import { helper } from "@/utils/helper"
-import { Button } from "@/components/Button"
+import { helper } from "@/utils/helper";
+import { Button } from "@/components/Button";
 ```
 
 경로 alias는 `tsconfig.json`에 설정됨: `"@/*": ["./src/*"]`
@@ -133,10 +147,10 @@ import { Button } from "@/components/Button"
 
 ```typescript
 // ❌ 잘못된 방식
-const { helper } = require("@/utils/helper")
+const { helper } = require("@/utils/helper");
 
 // ✅ 올바른 방식
-import { helper } from "@/utils/helper"
+import { helper } from "@/utils/helper";
 ```
 
 ### 3. 스타일링 - 컴포넌트 변형에 CVA 사용
@@ -144,8 +158,8 @@ import { helper } from "@/utils/helper"
 컴포넌트 스타일 변형에는 `class-variance-authority` (CVA)를 사용하세요:
 
 ```typescript
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
+import { cva, type VariantProps } from "class-variance-authority";
+import { cn } from "@/lib/utils";
 
 export const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-xl font-medium transition-colors",
@@ -162,7 +176,7 @@ export const buttonVariants = cva(
     },
     defaultVariants: { variant: "solid", size: "md" },
   }
-)
+);
 ```
 
 ### 4. 모바일 우선 반응형 디자인
@@ -184,16 +198,18 @@ export const buttonVariants = cva(
 ```
 
 **브레이크포인트 계층:**
+
 - Default: 모바일 (375px 폭 기준)
 - `sm:`: 640px+ (태블릿 및 데스크톱)
 - 코드베이스의 기존 패턴을 따를 때만 `lg:` 및 `xl:` 사용
 
 **텍스트 오버플로우 방지:**
+
 ```typescript
-className="break-all"        // 통화/긴 숫자용
-className="break-words"      // 일반 텍스트용
-className="flex-shrink-0"    // 아이콘/레이블용
-className="min-w-0 flex-1"   // 유연한 텍스트 컨테이너용
+className = "break-all"; // 통화/긴 숫자용
+className = "break-words"; // 일반 텍스트용
+className = "flex-shrink-0"; // 아이콘/레이블용
+className = "min-w-0 flex-1"; // 유연한 텍스트 컨테이너용
 ```
 
 ### 5. 언어 응답 규칙
@@ -214,61 +230,71 @@ className="min-w-0 flex-1"   // 유연한 텍스트 컨테이너용
 - **상태 관리**: React 19 훅 (외부 상태 라이브러리 없음)
 - **테마**: 다크 모드를 위한 next-themes
 - **타입 안전성**: strict 모드의 TypeScript 5
+- **테스트**: Playwright (E2E), @axe-core/playwright (접근성)
 
 ## 일반적인 패턴
 
 ### 새로운 Server Action 생성
 
 1. `actions/tmdb/types.ts`에 파라미터 스키마 정의:
+
 ```typescript
 export const GetSomethingParamsSchema = z.object({
   id: z.number().int().positive(),
-})
-export type GetSomethingParams = z.infer<typeof GetSomethingParamsSchema>
+});
+export type GetSomethingParams = z.infer<typeof GetSomethingParamsSchema>;
 ```
 
 2. `schemas/`에 응답을 위한 Zod 스키마 생성:
+
 ```typescript
-export const SomethingSchema = z.object({ /* ... */ })
-export type Something = z.infer<typeof SomethingSchema>
-export const safeParseSomething = (data: unknown) => SomethingSchema.safeParse(data)
+export const SomethingSchema = z.object({
+  /* ... */
+});
+export type Something = z.infer<typeof SomethingSchema>;
+export const safeParseSomething = (data: unknown) =>
+  SomethingSchema.safeParse(data);
 ```
 
 3. `actions/tmdb/`에 액션 구현:
+
 ```typescript
 export async function getSomething(
   params: GetSomethingParams
 ): Promise<ActionResult<Something>> {
   try {
-    const validated = GetSomethingParamsSchema.parse(params)
-    const headers = createAuthHeaders()
+    const validated = GetSomethingParamsSchema.parse(params);
+    const headers = createAuthHeaders();
     if (!headers) {
-      return { success: false, error: "TMDB API 토큰이 설정되지 않았습니다" }
+      return { success: false, error: "TMDB API 토큰이 설정되지 않았습니다" };
     }
 
     const response = await fetch(url, {
       headers,
-      next: { revalidate: 3600, tags: ["something"] }
-    })
+      next: { revalidate: 3600, tags: ["something"] },
+    });
 
     if (!response.ok) {
-      const errorMessage = await handleTMDBError(response)
-      return { success: false, error: errorMessage }
+      const errorMessage = await handleTMDBError(response);
+      return { success: false, error: errorMessage };
     }
 
-    const json = await response.json()
-    const result = safeParseSomething(json)
+    const json = await response.json();
+    const result = safeParseSomething(json);
 
     if (!result.success) {
-      return { success: false, error: `응답 데이터 검증 실패: ${result.error.message}` }
+      return {
+        success: false,
+        error: `응답 데이터 검증 실패: ${result.error.message}`,
+      };
     }
 
-    return { success: true, data: result.data }
+    return { success: true, data: result.data };
   } catch (error) {
     if (error instanceof Error) {
-      return { success: false, error: error.message }
+      return { success: false, error: error.message };
     }
-    return { success: false, error: "알 수 없는 오류가 발생했습니다" }
+    return { success: false, error: "알 수 없는 오류가 발생했습니다" };
   }
 }
 ```
@@ -276,14 +302,14 @@ export async function getSomething(
 ### 컴포넌트에서 Server Actions 사용
 
 ```typescript
-const result = await getSomething({ id: 123 })
+const result = await getSomething({ id: 123 });
 
 if (result.success) {
   // result.data 사용 (타입 안전)
-  console.log(result.data)
+  console.log(result.data);
 } else {
   // 에러 처리
-  console.error(result.error)
+  console.error(result.error);
 }
 ```
 
@@ -296,23 +322,77 @@ const loadMoreRef = useInfiniteScroll({
   onIntersect: loadNextPage,
   enabled: hasNextPage && !isLoading,
   threshold: 0.8, // 80% 보일 때 프리페치
-})
+});
 
 return (
   <>
-    {items.map(item => <Item key={item.id} item={item} />)}
+    {items.map((item) => (
+      <Item key={item.id} item={item} />
+    ))}
     <div ref={loadMoreRef} /> {/* Sentinel 요소 */}
   </>
-)
+);
 ```
+
+### 정적 생성 및 메타데이터
+
+Next.js의 `generateStaticParams`와 `generateMetadata`를 활용한 최적화:
+
+```typescript
+// app/movie/[id]/page.tsx
+
+// 인기 영화 상위 20개를 빌드 타임에 정적 생성
+export async function generateStaticParams() {
+  const result = await getPopularMovies({ page: 1 });
+
+  if (!result.success) return [];
+
+  return result.data.results.slice(0, 20).map((movie) => ({
+    id: movie.id.toString(),
+  }));
+}
+
+// 동적 메타데이터 생성 (SEO 최적화)
+export async function generateMetadata({
+  params,
+}: MoviePageProps): Promise<Metadata> {
+  const { id } = await params;
+  const result = await getMovieDetail({ id: Number(id) });
+
+  if (!result.success) {
+    return { title: "영화 정보 없음" };
+  }
+
+  const { title, overview, poster_path } = result.data;
+
+  return {
+    title: `${title} - Movie Database`,
+    description: overview,
+    openGraph: {
+      title,
+      description: overview,
+      images: poster_path ? [`${TMDB_IMAGE_BASE_URL}${poster_path}`] : [],
+    },
+  };
+}
+```
+
+**동작 방식:**
+
+- 빌드 타임에 인기 영화 20개의 페이지를 미리 생성
+- 나머지 영화는 첫 요청 시 생성 후 캐시 (ISR)
+- 각 페이지는 24시간 동안 캐시되며 동적 메타데이터 포함
 
 ## 이미지 최적화
 
 적절한 설정으로 Next.js Image 컴포넌트 사용:
 
 ```typescript
-import Image from "next/image"
-import { TMDB_IMAGE_BASE_URL, BLUR_DATA_URL } from "@/actions/tmdb/utils/config"
+import Image from "next/image";
+import {
+  TMDB_IMAGE_BASE_URL,
+  BLUR_DATA_URL,
+} from "@/actions/tmdb/utils/config";
 
 <Image
   src={`${TMDB_IMAGE_BASE_URL}${poster_path}`}
@@ -322,22 +402,156 @@ import { TMDB_IMAGE_BASE_URL, BLUR_DATA_URL } from "@/actions/tmdb/utils/config"
   className="object-cover rounded-lg"
   placeholder="blur"
   blurDataURL={BLUR_DATA_URL}
-/>
+/>;
 ```
 
 `image.tmdb.org`에 대한 원격 패턴이 `next.config.ts`에 설정되어 있습니다.
+
+## 테스트
+
+이 프로젝트는 Playwright를 사용한 포괄적인 E2E 테스트 시스템을 갖추고 있습니다.
+
+### 테스트 실행
+
+#### E2E 테스트
+
+```bash
+cd movie
+# 기본 실행 (헤드리스 모드)
+pnpm run test:e2e
+
+# UI 모드 (디버깅에 유용)
+pnpm run test:e2e:ui
+
+# 브라우저 표시 모드
+pnpm run test:e2e:headed
+
+# 디버그 모드
+pnpm run test:e2e:debug
+
+# 리포트 확인
+pnpm run test:e2e:report
+```
+
+#### 특정 테스트 실행
+
+```bash
+# 특정 파일만
+pnpm exec playwright test home.spec.ts
+
+# 특정 브라우저만
+pnpm exec playwright test --project=chromium
+pnpm exec playwright test --project=firefox
+pnpm exec playwright test --project=webkit
+
+# 모바일 테스트
+pnpm exec playwright test --project=mobile-chrome
+pnpm exec playwright test --project=mobile-safari
+
+# 태블릿 테스트
+pnpm exec playwright test --project=tablet
+```
+
+### 테스트 환경
+
+**브라우저 프로젝트:**
+
+- **Desktop**: Chromium, Firefox, WebKit (Safari)
+- **Mobile**: Pixel 5 (Chrome), iPhone 13 (Safari)
+- **Tablet**: iPad Pro
+
+**설정:**
+
+- 병렬 실행 활성화 (CI에서는 순차 실행)
+- CI 환경에서 2회 재시도
+- 실패 시 스크린샷/비디오 자동 캡처
+- 다중 리포터: HTML, JSON, JUnit
+
+### 테스트 종류
+
+1. **홈페이지 테스트** (`e2e/specs/home.spec.ts`)
+
+   - 페이지 렌더링 검증
+   - 영화 목록 로드 확인
+   - 이미지 지연 로딩
+
+2. **무한 스크롤 테스트** (`e2e/specs/infinite-scroll.spec.ts`)
+
+   - 스크롤 시 추가 데이터 로드
+   - 중복 제거 확인
+   - 여러 페이지 로드 테스트
+
+3. **테마 전환 테스트** (`e2e/specs/theme.spec.ts`)
+
+   - 다크/라이트 모드 토글
+   - 테마 설정 유지
+   - 시각적 변화 검증
+
+4. **접근성 테스트** (`e2e/specs/accessibility.spec.ts`)
+   - **WCAG 2.1 AA 준수 검증**
+   - @axe-core/playwright 사용
+   - 키보드 네비게이션
+   - 이미지 alt 텍스트
+   - Heading 계층 구조
+   - 색상 대비 검사
+
+### 테스트 전 준비
+
+첫 실행 시 Playwright 브라우저 설치:
+
+```bash
+cd movie
+pnpm exec playwright install --with-deps
+```
+
+## CI/CD
+
+### GitHub Actions 워크플로우
+
+프로젝트는 GitHub Actions를 통한 자동화된 E2E 테스트를 실행합니다.
+
+**워크플로우 파일:** `.github/workflows/e2e-tests.yml`
+
+**트리거 조건:**
+
+- `main`, `develop` 브랜치에 push
+- `main`, `develop` 브랜치 대상 Pull Request
+- `movie/` 디렉토리 내 코드 변경 시에만 실행
+
+**실행 환경:**
+
+- OS: Ubuntu Latest
+- Node.js: 20
+- 패키지 매니저: pnpm 10
+- 타임아웃: 60분
+
+**필수 시크릿:**
+
+- `TMDB_API_TOKEN`: TMDB API 액세스 토큰 (GitHub Repository Secrets에 설정)
+
+**아티팩트:**
+
+- Playwright HTML 리포트 (30일 보관)
+- 테스트 결과 (스크린샷, 비디오 포함, 30일 보관)
+
+**최적화:**
+
+- pnpm 스토어 캐싱으로 의존성 설치 시간 단축
+- 경로 기반 트리거로 불필요한 실행 방지
 
 ## 모바일 반응성 테스트
 
 UI 컴포넌트를 구현하거나 수정할 때:
 
 1. 375×667 (모바일)에서 테스트
+
    - 가로 스크롤 없음
    - 줌 없이 텍스트 읽기 가능
    - 터치 타겟 ≥ 44px
    - 콘텐츠 오버플로우 없음
 
 2. 1024×768+ (데스크톱)에서 테스트
+
    - 레이아웃이 디자인과 일치
    - 시각적 퇴행 없음
    - 적절한 정렬
