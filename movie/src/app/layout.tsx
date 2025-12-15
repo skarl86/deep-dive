@@ -1,5 +1,6 @@
 import { ThemeProvider } from "@/components/theme-provider"
 import { Header } from "@/components/header"
+import { NavigationProgress } from "@/components/navigation-progress"
 import type { Metadata } from "next"
 import { Open_Sans } from "next/font/google"
 import "./globals.css"
@@ -26,6 +27,7 @@ export default function RootLayout({
         className={`${openSans.variable} min-h-screen bg-zinc-50 font-sans antialiased dark:bg-zinc-950`}
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NavigationProgress />
           <Header />
           <main className="container mx-auto px-4 pb-8">{children}</main>
         </ThemeProvider>

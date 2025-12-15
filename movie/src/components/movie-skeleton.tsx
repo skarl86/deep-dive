@@ -17,7 +17,12 @@ export function MovieSkeleton({ count = 20 }: MovieSkeletonProps) {
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
-        <article key={index} className="flex flex-col gap-2" aria-hidden="true">
+        <article
+          key={index}
+          className="flex flex-col gap-2"
+          aria-hidden="true"
+          data-testid="movie-card-skeleton"
+        >
           {/* 포스터 이미지 영역 - MovieCard와 동일한 aspect ratio */}
           <div className="relative aspect-[2/3] w-full animate-pulse rounded-lg bg-gray-200 dark:bg-gray-800" />
 
