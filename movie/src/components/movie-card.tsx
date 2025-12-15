@@ -17,7 +17,10 @@ export function MovieCard({ movie }: MovieCardProps) {
     : null
 
   return (
-    <Link href={`/movie/${movie.id}`}>
+    <Link
+      href={`/movie/${movie.id}`}
+      className="focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-zinc-300 rounded-lg"
+    >
       <article
         data-testid="movie-card"
         className="flex cursor-pointer flex-col gap-2 transition-transform hover:scale-105"
@@ -49,7 +52,7 @@ export function MovieCard({ movie }: MovieCardProps) {
         </h3>
 
         {/* 평점 */}
-        <div className="flex items-center gap-1 text-xs text-gray-600">
+        <div className="flex items-center gap-1 text-xs text-zinc-700 dark:text-zinc-300">
           <span aria-label={`평점 ${movie.vote_average.toFixed(1)}점`}>
             ⭐ {movie.vote_average.toFixed(1)}
           </span>
