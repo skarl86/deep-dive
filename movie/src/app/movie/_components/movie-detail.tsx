@@ -1,5 +1,6 @@
 import { BLUR_DATA_URL, TMDB_IMAGE_BASE_URL } from "@/actions/tmdb/utils/config"
 import type { MovieDetail as MovieDetailType } from "@/schemas"
+import { MovieSchema } from "@/app/movie/_structured-data/movie-schema"
 import { Calendar, Clock, Star } from "lucide-react"
 import Image from "next/image"
 
@@ -38,9 +39,11 @@ export function MovieDetail({ movie }: MovieDetailProps) {
   })
 
   return (
-    <article className="min-h-screen">
-      {/* Hero 섹션 - 백드롭 이미지 + 그라데이션 오버레이 */}
-      <section className="relative w-full" aria-label="영화 정보">
+    <>
+      <MovieSchema movie={movie} />
+      <article className="min-h-screen">
+        {/* Hero 섹션 - 백드롭 이미지 + 그라데이션 오버레이 */}
+        <section className="relative w-full" aria-label="영화 정보">
         {/* 백드롭 이미지 */}
         <div className="relative h-[50vh] w-full sm:h-[60vh] lg:h-[70vh]">
           {backdropUrl ? (
@@ -127,7 +130,7 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
                   {/* 개봉일 */}
                   <div className="rounded-lg border border-zinc-200 bg-white p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                    <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
                       <Calendar className="h-4 w-4 flex-shrink-0" />
                       <span className="text-xs font-medium sm:text-sm">
                         개봉일
@@ -140,7 +143,7 @@ export function MovieDetail({ movie }: MovieDetailProps) {
 
                   {/* 러닝타임 */}
                   <div className="rounded-lg border border-zinc-200 bg-white p-3 sm:p-4 dark:border-zinc-800 dark:bg-zinc-900">
-                    <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+                    <div className="flex items-center gap-2 text-zinc-700 dark:text-zinc-300">
                       <Clock className="h-4 w-4 flex-shrink-0" />
                       <span className="text-xs font-medium sm:text-sm">
                         러닝타임
@@ -284,9 +287,10 @@ export function MovieDetail({ movie }: MovieDetailProps) {
                 </div>
               </section>
             </div>
+            </div>
           </div>
         </div>
-      </div>
-    </article>
+      </article>
+    </>
   )
 }

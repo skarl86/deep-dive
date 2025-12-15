@@ -99,7 +99,7 @@ export function InfiniteMovieList({
 
   return (
     <section aria-label="인기 영화 목록">
-      <h2 className="mb-6 text-2xl font-bold">인기 영화</h2>
+      <h1 className="mb-6 text-2xl font-bold">인기 영화</h1>
 
       {/* 영화 그리드 - MovieList와 동일한 레이아웃 */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4 lg:grid-cols-6 lg:gap-6 xl:grid-cols-8">

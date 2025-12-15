@@ -1,5 +1,6 @@
 import { searchMovies } from "@/actions/tmdb/search"
 import { SearchEmpty } from "@/app/search/_components/search-empty"
+import { SearchResultsSchema } from "@/app/search/_structured-data/search-results"
 import type { Metadata } from "next"
 import { redirect } from "next/navigation"
 import { SearchResultsList } from "./_components/search-results-list"
@@ -85,6 +86,11 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   // 검색 결과 표시
   return (
     <main className="container mx-auto px-4 py-8">
+      <SearchResultsSchema
+        query={query}
+        movies={result.data.results}
+        totalResults={result.data.total_results}
+      />
       <SearchResultsList
         initialMovies={result.data.results}
         query={query}

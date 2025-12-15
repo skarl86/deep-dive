@@ -130,7 +130,10 @@ export function Header() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-zinc-900 dark:hover:text-zinc-50",
+                    "text-sm font-medium transition-colors rounded-md px-2 py-1",
+                    "hover:text-zinc-900 dark:hover:text-zinc-50",
+                    "focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 focus-visible:outline-none",
+                    "dark:focus-visible:ring-zinc-300",
                     pathname === item.href
                       ? "text-zinc-900 dark:text-zinc-50"
                       : "text-zinc-600 dark:text-zinc-400"
@@ -238,7 +241,9 @@ export function Header() {
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "border-b border-zinc-200 py-3 text-lg font-medium transition-colors dark:border-zinc-800",
+                    "border-b border-zinc-200 py-3 text-lg font-medium transition-colors rounded-md px-2",
+                    "dark:border-zinc-800",
+                    "focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:outline-none dark:focus-visible:ring-zinc-300",
                     pathname === item.href
                       ? "text-zinc-900 dark:text-zinc-50"
                       : "text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50"
