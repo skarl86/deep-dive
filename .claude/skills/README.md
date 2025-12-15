@@ -16,9 +16,10 @@ Git 변경사항을 한국어 컨벤셔널 커밋 형식으로 자동 커밋합�
 
 **주요 기능**:
 
-- 변경사항을 자동으로 논리적 단위로 그룹화
+- **각 파일의 내용과 역할을 분석**하여 논리적 단위로 그룹화
+- 파일 간 의존 관계와 도메인 응집성 고려
 - 한국어 컨벤셔널 커밋 형식 준수
-- 커밋 메시지 자동 생성 및 검증
+- 구체적이고 명확한 커밋 메시지 자동 생성 및 검증
 
 **관련 파일**:
 
@@ -81,12 +82,25 @@ gh auth status
 사용자: "변경사항을 커밋해줘"
 
 Claude:
-1. git diff 분석
-2. 변경사항을 3개 그룹으로 분류:
-   - feat(api): TMDB 검색 API 엔드포인트 추가
-   - feat(ui): 영화 검색 컴포넌트 구현
-   - docs(readme): API 사용법 문서 추가
-3. 각 그룹별로 커밋 실행
+1. git status로 변경된 파일 확인
+   → SearchBar.tsx, tmdb.ts, README.md
+
+2. 각 파일의 내용을 Read로 읽고 분석
+   → SearchBar.tsx: 검색 UI 컴포넌트
+   → tmdb.ts: TMDB API 호출 함수
+   → README.md: 문서
+
+3. 파일 간 관계 파악
+   → SearchBar가 tmdb.ts에 의존
+   → 같은 "검색" 기능에 속함
+
+4. 논리적으로 그룹화
+   - 그룹 1 (feat): SearchBar.tsx + tmdb.ts
+   - 그룹 2 (docs): README.md
+
+5. 각 그룹별로 구체적인 커밋 실행
+   ✅ feat(search): TMDB API를 활용한 영화 검색 기능 추가
+   ✅ docs(readme): 영화 검색 기능 사용법 추가
 ```
 
 ### git-pr 스킬
